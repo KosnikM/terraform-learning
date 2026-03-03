@@ -1,22 +1,14 @@
 resource "azurerm_resource_group" "first_rg" {
-  name = var.resource_group_name
+  name     = var.resource_group_name
   location = var.location
-
-  tags = { 
-    Environment = "Learning"
-    Owner = "Maciek"
-    Project = "Terraform-Day1"
-    ManagedBy = "Terraform"
-
-   }
-  
+  tags     = var.tags
 }
 
 resource "azurerm_virtual_network" "main_vnet" {
-  name = "vnet-${var.environment}"
-  location = azurerm_resource_group.first_rg.location
+  name                = "vnet-${var.environment}"
+  location            = azurerm_resource_group.first_rg.location
   resource_group_name = azurerm_resource_group.first_rg.name
-  address_space = ["10.0.0.0/16"]
+  address_space       = ["10.0.0.0/16"]
 }
 
 resource "azurerm_subnet" "app_subnet" {
