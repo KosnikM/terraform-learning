@@ -13,3 +13,26 @@ output "resource_group_id" {
   description = "ID resource grupy w Azure"
   value = azurerm_resource_group.first_rg.id
 }
+
+output "vnet_name" {
+  description = "Nazwa Vnet"
+  value = azurerm_virtual_network.main_vnet.name
+  
+}
+
+output "subnet_name" {
+  description = "Nazwa subnetu"
+  value = azurerm_subnet.app_subnet.name
+  
+}
+
+output "subnet_id" {
+  description = "Subnet id"
+  value = azurerm_subnet.app_subnet.id
+  
+}
+
+output "vnet_ID" {
+  description = "Vnet id"
+  value = azurerm_virtual_network.main_vnet.id
+}

@@ -9,3 +9,9 @@ variable "location" {
     type = string
     default = "Poland Central"
 }
+
+variable "environment" {
+    description = "środowisko"
+    type = string
+    default = "dev"
+}
