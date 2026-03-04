@@ -12,3 +12,10 @@ Dzień 1 nauki - Resource Group w Azure
 - terraform fmt - formatowanie kodu
 - terraform validate - walidacja skladni
 - Bash: zmienne, export, env, grep
+
+## Dzien 4
+- Teoria: Locals vs variables, funkcje (join, lookup, length, format)
+- Ternary operator - warunkowe wartosci
+- Lifecycle rules: prevent_destroy, create_before_destroy, ignore_changes
+- Terraform state: state list, state show
+- Bash: pierwszy skrypt init-project.sh

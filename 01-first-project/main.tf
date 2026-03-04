@@ -1,11 +1,15 @@
 resource "azurerm_resource_group" "first_rg" {
-  name     = var.resource_group_name
+  name     = "${local.name_prefix}-rg"
   location = var.location
   tags     = var.tags
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 resource "azurerm_virtual_network" "main_vnet" {
-  name                = "vnet-${var.environment}"
+  name                = "${local.name_prefix}-vnet"
   location            = azurerm_resource_group.first_rg.location
   resource_group_name = azurerm_resource_group.first_rg.name
   address_space       = ["10.0.0.0/16"]
