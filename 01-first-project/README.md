@@ -19,3 +19,10 @@ Dzień 1 nauki - Resource Group w Azure
 - Lifecycle rules: prevent_destroy, create_before_destroy, ignore_changes
 - Terraform state: state list, state show
 - Bash: pierwszy skrypt init-project.sh
+
+## Dzien 5
+- State: czym jest, dlaczego krytyczny, state locking
+- Komendy: state list, state show, state mv, state rm
+- terraform import - przejecie istniejacego zasobu
+- Storage Account + Container + Data Source
+- terraform.tfvars dla dev i prod
