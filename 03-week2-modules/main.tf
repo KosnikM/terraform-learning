@@ -7,3 +7,12 @@ module "rg" {
     project = var.project_name
   }
 }
+
+module "rg_staging" {
+    source  = "./modules/resource-group"
+    name = "rg-${var.project_name}-staging"
+    tags = {
+      environment = "staging"
+      project = var.project_name
+    }
+ }
