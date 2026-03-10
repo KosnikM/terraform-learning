@@ -1,10 +1,10 @@
 # Variables
 variable "environment" {
-  type = string
+  type    = string
   default = "dev"
 }
 
 variable "project_name" {
-  type = string
+  type    = string
   default = "week2"
 }

@@ -4,14 +4,14 @@ variable "name" {
 }
 
 variable "location" {
-  type = string
+  type    = string
   default = "polandcentral"
 }
 
 variable "tags" {
   type = map(string)
   default = {
-    
+
   }
 
 }
