@@ -20,3 +20,8 @@ Project structure:
 ./scripts/tf-init.sh
 ./terraform.tfvars
 ./variables.tf
+
+## Day 2 — Networking module
+Created networking child module with VNet, Subnet, NSG and NSG association.
+Learned how Azure networking resources connect to each other.
+Added tf-wrapper.sh script with Bash functions.
