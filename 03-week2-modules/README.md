@@ -25,3 +25,7 @@ Project structure:
 Created networking child module with VNet, Subnet, NSG and NSG association.
 Learned how Azure networking resources connect to each other.
 Added tf-wrapper.sh script with Bash functions.
+## Day 3 — Remote State
+Configured remote backend in Azure Storage Account.
+Migrated local state to remote. Tested state locking with two terminals.
+Created import-from-csv.sh script for reading CSV files with Bash.
