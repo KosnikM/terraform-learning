@@ -7,10 +7,12 @@ resource "azurerm_virtual_network" "this" {
 }
 
 resource "azurerm_subnet" "this" {
-  name                 = var.subnet_name
+  for_each = var.subnets
+  name                 = each.key
   resource_group_name  = var.resource_group_name
   virtual_network_name = azurerm_virtual_network.this.name
-  address_prefixes     = [var.subnet_address_prefix]
+  address_prefixes     = [each.value.address_prefix]
+  
 }
 
 resource "azurerm_network_security_group" "this" {
@@ -21,7 +23,9 @@ resource "azurerm_network_security_group" "this" {
 }
 
 resource "azurerm_subnet_network_security_group_association" "this" {
-  subnet_id                 = azurerm_subnet.this.id
+  for_each = var.subnets
+  subnet_id                 = azurerm_subnet.this[each.key].id
   network_security_group_id = azurerm_network_security_group.this.id
 }
 
+  

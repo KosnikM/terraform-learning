@@ -15,14 +15,6 @@ variable "vnet_address_space" {
   default = "10.0.0.0/16"
 }
 
-variable "subnet_name" {
-  type = string
-}
-
-variable "subnet_address_prefix" {
-  type    = string
-  default = "10.0.1.0/24"
-}
 
 variable "nsg_name" {
   type = string
@@ -33,4 +25,10 @@ variable "tags" {
   default = {
 
   }
+}
+
+variable "subnets" {
+  type = map(object({
+    address_prefix = string
+  }))
 }

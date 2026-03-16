@@ -25,11 +25,11 @@ output "vnet_name" {
 output "vnet_id" {
     value       = module.networking.vnet_id
 }
-output "subnet_name" {
-    value       = module.networking.subnet_name
+output "subnet_names" {
+    value       = module.networking.subnet_names
 }
-output "subnet_id" {
-    value       = module.networking.subnet_id
+output "subnet_ids" {
+    value       = module.networking.subnet_ids
 }
 output "nsg_name" {
     value       = module.networking.nsg_name
