@@ -29,3 +29,7 @@ Added tf-wrapper.sh script with Bash functions.
 Configured remote backend in Azure Storage Account.
 Migrated local state to remote. Tested state locking with two terminals.
 Created import-from-csv.sh script for reading CSV files with Bash.
+## Day 4 — count, for_each, dynamic blocks
+Refactored networking module to use for_each for subnets.
+Added dynamic block for NSG security rules.
+Subnets now created from map variable in tfvars.
