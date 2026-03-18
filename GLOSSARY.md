@@ -22,6 +22,7 @@
 - **locals** - create from variables. Save time, define in one file and can use from referring to other instructions. We can use short  name than refer 3 or more variables
 - **locking (state locking)** — mechanism that prevents two people from modifying state at the same time
 ## M
+- **multi-env** — strategy of managing multiple environments (dev/staging/prod) with separate folders, each with own backend and state file
 - **module** — reusable block of Terraform code, contains its own main.tf, variables.tf, outputs.tf
 ## N
 - **NSG (Network Security Group)** — firewall rules attached to subnet or NIC, controls inbound/outbound traffic
@@ -40,12 +41,15 @@
 - **Storage Account** — Azure resource for storing data (files, blobs). Used as backend for Terraform remote state
 - **subnet** — smaller network inside VNet, has its own address range (e.g. 10.0.1.0/24)
 ## T
+- **Terragrunt** — wrapper tool for Terraform that automates multi-env folder approach, reduces code duplication
 - **terraform state file** - terraform.tfstate - file where terraform read what you have, what you want to do and what resources exists > terraform know what should do add/modify or delete after terraform apply command
 ## U
 ## V
 - **variable** - a values that we define in code. Define once and we can use it referring to others files. Hierarchy from weaker to the strongest - default in block variable {} > terraform.tfvars > TF_VAR_name > -var "name=value" in CLI
 - **VNet (Virtual Network)** — isolated network in Azure, contains subnets, has address space (e.g. 10.0.0.0/16)
 ## W
+- **workspace** — Terraform mechanism that creates separate state files for the same code, switch with terraform workspace select
+
 ## X
 ## Y
 ## Z

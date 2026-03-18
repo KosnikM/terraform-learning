@@ -33,3 +33,8 @@ Created import-from-csv.sh script for reading CSV files with Bash.
 Refactored networking module to use for_each for subnets.
 Added dynamic block for NSG security rules.
 Subnets now created from map variable in tfvars.
+## Day 5 — Workspaces and Multi-Environment
+Tested terraform workspaces (separate state per workspace).
+Created new project 04-week2-multi-env with separate folders for dev and staging.
+Same networking module, different values per environment.
+Each environment has its own backend key (dev.tfstate, staging.tfstate).
