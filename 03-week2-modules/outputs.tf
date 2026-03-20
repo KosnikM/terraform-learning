@@ -20,22 +20,22 @@ output "staging_id" {
 }
 
 output "vnet_name" {
-    value       = module.networking.vnet_name
+  value = module.networking.vnet_name
 }
 output "vnet_id" {
-    value       = module.networking.vnet_id
+  value = module.networking.vnet_id
 }
 output "subnet_names" {
-    value       = module.networking.subnet_names
+  value = module.networking.subnet_names
 }
 output "subnet_ids" {
-    value       = module.networking.subnet_ids
+  value = module.networking.subnet_ids
 }
 output "nsg_name" {
-    value       = module.networking.nsg_name
+  value = module.networking.nsg_name
 }
 output "nsg_id" {
-    value       = module.networking.nsg_id
+  value = module.networking.nsg_id
 }
 
 

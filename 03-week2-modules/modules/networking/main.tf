@@ -7,12 +7,12 @@ resource "azurerm_virtual_network" "this" {
 }
 
 resource "azurerm_subnet" "this" {
-  for_each = var.subnets
+  for_each             = var.subnets
   name                 = each.key
   resource_group_name  = var.resource_group_name
   virtual_network_name = azurerm_virtual_network.this.name
   address_prefixes     = [each.value.address_prefix]
-  
+
 }
 
 resource "azurerm_network_security_group" "this" {
@@ -23,9 +23,9 @@ resource "azurerm_network_security_group" "this" {
   lifecycle {
     create_before_destroy = true
   }
-    dynamic "security_rule" {
-      for_each = var.nsg_rules
-      content {
+  dynamic "security_rule" {
+    for_each = var.nsg_rules
+    content {
       name                       = security_rule.value.name
       priority                   = security_rule.value.priority
       direction                  = security_rule.value.direction
@@ -40,7 +40,7 @@ resource "azurerm_network_security_group" "this" {
 }
 
 resource "azurerm_subnet_network_security_group_association" "this" {
-  for_each = var.subnets
+  for_each                  = var.subnets
   subnet_id                 = azurerm_subnet.this[each.key].id
   network_security_group_id = azurerm_network_security_group.this.id
 }

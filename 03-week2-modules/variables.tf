@@ -10,12 +10,12 @@ variable "project_name" {
 }
 
 variable "subnets" {
-    type = map (
-        object(
-            {
-            address_prefix = string
-        }
-    ))
+  type = map(
+    object(
+      {
+        address_prefix = string
+      }
+  ))
 }
 variable "nsg_rules" {
   type = list(object({
