@@ -32,6 +32,7 @@ variable "address_space" {
       address_space = ["10.1.0.0/16"]
       subnets = {
         workload = { address_prefix = "10.1.1.0/24" }
+        private-endpoints = { address_prefix = "10.1.2.0/24" }
       }
     }
     spoke-prod = {
