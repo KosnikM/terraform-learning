@@ -429,6 +429,9 @@ resource "azurerm_log_analytics_workspace" "this" {
   resource_group_name = azurerm_resource_group.this.name
   sku                 = "PerGB2018"
   retention_in_days   = 30
+    tags = {
+    environment = var.environment
+  }
 }
 
 resource "azurerm_monitor_diagnostic_setting" "vm" {
@@ -472,6 +475,9 @@ resource "azurerm_monitor_metric_alert" "cpu_alert" {
   severity            = 2
   frequency           = "PT5M"
   window_size         = "PT15M"
+    tags = {
+    environment = var.environment
+  }
 
   criteria {
     metric_namespace = "Microsoft.Compute/virtualMachines"
@@ -484,4 +490,26 @@ resource "azurerm_monitor_metric_alert" "cpu_alert" {
   action {
     action_group_id = azurerm_monitor_action_group.email.id
   }
+}
+/*
+resource "azurerm_resource_group_policy_assignment" "require_env_tag" {
+  name                 = "require-environment-tag"
+  resource_group_id    = azurerm_resource_group.this.id
+  policy_definition_id = "/providers/Microsoft.Authorization/policyDefinitions/871b6d14-10aa-478d-b590-94f262ecfa99"
+  
+  
+  parameters = jsonencode({
+    tagName = { value = "environment" }
+    effect  = { value = "Audit" }
+  })
+}
+*/
+resource "azurerm_resource_group_policy_assignment" "allowed_vm_skus" {
+  name                 = "allowed-vm-sizes"
+  resource_group_id    = azurerm_resource_group.this.id
+  policy_definition_id = "/providers/Microsoft.Authorization/policyDefinitions/cccc23c7-8427-4f53-ad12-b6a63eb452b3"
+
+  parameters = jsonencode({
+    listOfAllowedSKUs = { value = ["Standard_B2ats_v2", "Standard_B2s", "Standard_D2s_v3"] }
+  })
 }
