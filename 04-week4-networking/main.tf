@@ -329,3 +329,61 @@ resource "azurerm_role_assignment" "app_rg_reader" {
   role_definition_name = "Reader"
   principal_id         = azurerm_user_assigned_identity.app.principal_id
 }
+
+resource "azurerm_network_interface" "nic_workload" {
+name = "nic_workload"
+location = var.location
+resource_group_name = azurerm_resource_group.this.name
+ip_configuration {
+  name = "nic_workload_config"
+  subnet_id = azurerm_subnet.this["spoke-dev-workload"].id
+  private_ip_address_allocation = "Dynamic"
+}
+
+}
+
+resource "azurerm_linux_virtual_machine" "VM1" {
+  name = "VM1"
+  location = var.location
+  resource_group_name = azurerm_resource_group.this.name
+  size = "Standard_B2ats_v2"
+  admin_username = "adminuser"
+  admin_ssh_key {
+  username   = "adminuser"
+  public_key = file("~/.ssh/id_rsa.pub")
+}
+  network_interface_ids = [
+    azurerm_network_interface.nic_workload.id
+  ]
+    os_disk {
+    caching              = "ReadWrite"
+    storage_account_type = "Standard_LRS"
+  }
+  
+  source_image_reference {
+    publisher = "Canonical"
+    offer     = "0001-com-ubuntu-server-jammy"
+    sku       = "22_04-lts"
+    version   = "latest"
+  }
+  zone = "1"
+   identity {
+    type         = "UserAssigned"
+    identity_ids = [azurerm_user_assigned_identity.app.id]
+  }
+}
+/*
+resource "azurerm_virtual_machine_extension" "nginx" {
+  name                 = "install-nginx"
+  virtual_machine_id   = azurerm_linux_virtual_machine.VM1.id
+  publisher            = "Microsoft.Azure.Extensions"
+  type                 = "CustomScript"
+  type_handler_version = "2.0"
+
+  settings = <<SETTINGS
+    {
+      "commandToExecute": "sudo apt-get update && sudo apt-get install -y nginx"
+    }
+  SETTINGS
+}
+*/
