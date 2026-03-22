@@ -513,3 +513,83 @@ resource "azurerm_resource_group_policy_assignment" "allowed_vm_skus" {
     listOfAllowedSKUs = { value = ["Standard_B2ats_v2", "Standard_B2s", "Standard_D2s_v3"] }
   })
 }
+
+
+resource "azurerm_storage_management_policy" "lifecycle" {
+  storage_account_id = azurerm_storage_account.this.id
+
+  rule {
+    name    = "move-to-cool"
+    enabled = true
+
+    filters {
+      blob_types = ["blockBlob"]
+    }
+
+    actions {
+      base_blob {
+        tier_to_cool_after_days_since_modification_greater_than    = 30
+        delete_after_days_since_modification_greater_than          = 365
+      }
+    }
+  }
+}
+/* 
+resource "azurerm_mssql_server" "this" {
+  name                         = "sql-hubspoke-dev-mk"
+  resource_group_name          = azurerm_resource_group.this.name
+  location                     = var.location
+  version                      = "12.0"
+  administrator_login          = "sqladmin"
+  administrator_login_password = azurerm_key_vault_secret.sql_admin_password.value
+  
+  public_network_access_enabled = false
+}
+
+resource "azurerm_mssql_database" "payments" {
+  name      = "db-payments"
+  server_id = azurerm_mssql_server.this.id
+  sku_name  = "Basic"
+  geo_backup_enabled = false
+}
+
+resource "azurerm_key_vault_secret" "sql_admin_password" {
+  name         = "sql-admin-password"
+  value        = "P@ssw0rd1234!"
+  key_vault_id = azurerm_key_vault.this.id
+}
+
+// DNS Zone → VNet Link → Endpoint → A Record
+resource "azurerm_private_dns_zone" "sql" {
+  name                = "privatelink.database.windows.net"
+  resource_group_name = azurerm_resource_group.this.name
+}
+
+resource "azurerm_private_dns_zone_virtual_network_link" "sql" {
+  name                  = "vnetlink-sql-spoke-dev"
+  resource_group_name   = azurerm_resource_group.this.name
+  private_dns_zone_name = azurerm_private_dns_zone.sql.name
+  virtual_network_id    = azurerm_virtual_network.this["spoke-dev"].id
+}
+
+resource "azurerm_private_endpoint" "sql" {
+  name                = "pe-sql-spoke-dev"
+  location            = var.location
+  resource_group_name = azurerm_resource_group.this.name
+  subnet_id           = azurerm_subnet.this["spoke-dev-private-endpoints"].id
+
+  private_service_connection {
+    name                           = "pe-connection-sql"
+    private_connection_resource_id = azurerm_mssql_server.this.id
+    subresource_names              = ["sqlServer"]
+    is_manual_connection           = false
+  }
+}
+
+resource "azurerm_private_dns_a_record" "sql" {
+  name                = azurerm_mssql_server.this.name
+  zone_name           = azurerm_private_dns_zone.sql.name
+  resource_group_name = azurerm_resource_group.this.name
+  ttl                 = 300
+  records             = [azurerm_private_endpoint.sql.private_service_connection[0].private_ip_address]
+}*/
