@@ -387,3 +387,39 @@ resource "azurerm_virtual_machine_extension" "nginx" {
   SETTINGS
 }
 */
+resource "azurerm_service_plan" "this" {
+  name                = "asp-${var.project_name}-${var.environment}"
+  location            = var.location
+  resource_group_name = azurerm_resource_group.this.name
+  os_type             = "Linux"
+  sku_name            = "S1"
+}
+
+resource "azurerm_linux_web_app" "this" {
+  name                = "webapp-hubspoke-dev-mk"
+  location            = var.location
+  resource_group_name = azurerm_resource_group.this.name
+  service_plan_id     = azurerm_service_plan.this.id
+
+  site_config {}
+
+  identity {
+    type         = "UserAssigned"
+    identity_ids = [azurerm_user_assigned_identity.app.id]
+  }
+    app_settings = {
+    "SQL_CONNECTION_STRING" = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.sql_connecting_string.versionless_id})"
+  }
+}
+
+resource "azurerm_linux_web_app_slot" "staging" {
+  name           = "staging"
+  app_service_id = azurerm_linux_web_app.this.id
+
+  site_config {}
+
+  identity {
+    type         = "UserAssigned"
+    identity_ids = [azurerm_user_assigned_identity.app.id]
+  }
+}
