@@ -313,7 +313,7 @@ resource "azurerm_user_assigned_identity" "app" {
   location            = var.location
   resource_group_name = azurerm_resource_group.this.name
 }
-resource "azurerm_role_assignment" "keyvault_reader" {
+resource "azurerm_role_assignment" "keyvault_reader" { 
   scope                = azurerm_key_vault.this.id
   role_definition_name = "Key Vault Secrets User"
   principal_id         = azurerm_user_assigned_identity.app.principal_id
@@ -421,5 +421,67 @@ resource "azurerm_linux_web_app_slot" "staging" {
   identity {
     type         = "UserAssigned"
     identity_ids = [azurerm_user_assigned_identity.app.id]
+  }
+}
+resource "azurerm_log_analytics_workspace" "this" {
+  name                = "law-${var.project_name}-${var.environment}"
+  location            = var.location
+  resource_group_name = azurerm_resource_group.this.name
+  sku                 = "PerGB2018"
+  retention_in_days   = 30
+}
+
+resource "azurerm_monitor_diagnostic_setting" "vm" {
+  name                       = "diag-vm"
+  target_resource_id         = azurerm_linux_virtual_machine.VM1.id
+  log_analytics_workspace_id = azurerm_log_analytics_workspace.this.id
+
+  enabled_metric {
+    category = "AllMetrics"
+  }
+}
+
+resource "azurerm_monitor_diagnostic_setting" "keyvault" {
+  name                       = "diag-keyvault"
+  target_resource_id         = azurerm_key_vault.this.id
+  log_analytics_workspace_id = azurerm_log_analytics_workspace.this.id
+
+  enabled_log {
+    category = "AuditEvent"
+  }
+
+  enabled_metric {
+    category = "AllMetrics"
+  }
+}
+resource "azurerm_monitor_action_group" "email" {
+  name                = "ag-email-${var.environment}"
+  resource_group_name = azurerm_resource_group.this.name
+  short_name          = "email"
+
+  email_receiver {
+    name          = "admin"
+    email_address = "mkosnikk@gmail.com"
+  }
+}
+
+resource "azurerm_monitor_metric_alert" "cpu_alert" {
+  name                = "alert-cpu-high"
+  resource_group_name = azurerm_resource_group.this.name
+  scopes              = [azurerm_linux_virtual_machine.VM1.id]
+  severity            = 2
+  frequency           = "PT5M"
+  window_size         = "PT15M"
+
+  criteria {
+    metric_namespace = "Microsoft.Compute/virtualMachines"
+    metric_name      = "Percentage CPU"
+    aggregation      = "Average"
+    operator         = "GreaterThan"
+    threshold        = 80
+  }
+
+  action {
+    action_group_id = azurerm_monitor_action_group.email.id
   }
 }
