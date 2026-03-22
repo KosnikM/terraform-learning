@@ -3,3 +3,6 @@
 *.tfstate.backup
 .terraform.lock.hcl
 *.tfvars
+*.pem
+id_rsa
+.ssh/
